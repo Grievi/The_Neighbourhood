@@ -46,7 +46,7 @@ def user_signup(request):
             # login(request, user)
             messages.success(request,("Account created successfully"))
 
-            return redirect('login')
+            return redirect('index')
             
     else:
         form=UserCreationForm()
