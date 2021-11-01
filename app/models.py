@@ -15,3 +15,7 @@ class NeighbourHood(models.Model):
 
     def delete_neighborhood(self):
         self.delete()
+
+    @classmethod
+    def get_neighborhood(cls, N_hood_id):
+        return cls.objects.filter(id=N_hood_id)
