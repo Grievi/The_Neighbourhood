@@ -4,8 +4,9 @@ from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages 
 from django.contrib.auth import login,authenticate,logout
+from django.contrib.auth.decorators import login_required
 
-
+@login_required(login_url='login')
 def index(request):
     return render (request, 'index.html')
 
@@ -18,11 +19,11 @@ def user_login(request):
 
         if user is not None:
             login(request, user)
-            messages.success(request,f"Welcome {username} to Movie Gallore!")
-            return redirect('home')
+            messages.success(request,f"Welcome {username} to Th Neighbourhood!")
+            return redirect('index')
 
         else:
-            messages.success(request,"Oops Somethinge went wrong, please Login!")
+            messages.success(request,"Oops Something went wrong, please Login!")
 
             return render(request, 'registration/login.html')
     else:
@@ -43,7 +44,7 @@ def user_signup(request):
             username = form.cleaned_data['username']
             password = form.cleaned_data['password1']
             user= authenticate(username=username, password=password)
-            # login(request, user)
+            login(request, user)
             messages.success(request,("Account created successfully"))
 
             return redirect('index')
@@ -51,3 +52,11 @@ def user_signup(request):
     else:
         form=UserCreationForm()
     return render(request, 'registration/signup.html', {"message": message,"form": form})
+
+def neighbourhood(request):
+    neighbourhoods = NeighbourHood.objects.all()
+    neighbourhoods = neighbourhoods[::-1]
+    params = {
+        'neighbourhoods': neighbourhoods,
+    }
+    return render(request, 'neighbourhoods.html', params)
