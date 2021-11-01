@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from datetime import datetime as dt
 
 class NeighbourHood(models.Model):
     admin = models.ForeignKey("Profile", on_delete=models.CASCADE, related_name='hood')
@@ -7,6 +8,7 @@ class NeighbourHood(models.Model):
     location = models.CharField(max_length=60)
     occupants_count=models.IntegerField(null=True, blank=True)
     description = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
     
     def __str__(self):
         return f'{self.name}'
@@ -28,9 +30,25 @@ class Profile(models.Model):
     profile_picture = models.ImageField(upload_to='images/', default='default.png')
     location = models.CharField(max_length=50, blank=True, null=True)
     neighbourhood = models.ForeignKey(NeighbourHood, on_delete=models.SET_NULL, null=True, related_name='hood_member', blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f'{self.user.username} profile'
 
     def save_profile(self):
         self.save()
+
+class Business(models.Model):
+    name = models.CharField(max_length=50)
+    email = models.EmailField(max_length=50)
+    description = models.TextField(blank=True, null=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    neighbourhood = models.ForeignKey(NeighbourHood, on_delete=models.CASCADE,related_name='business')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def create_business(self):
+        self.save()
+
+    def __str__(self):
+        return self.name
+    
