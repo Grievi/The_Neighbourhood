@@ -86,4 +86,19 @@ def edit_profile(request, username):
             return redirect('profile', user.username)
     else:
         form = ProfileForm(instance=request.user.profile)
-    return render(request, 'editprofile.html', {'form': form})
+    return render(request, 'profile_edit.html', {'form': form})
+
+def business_search(request):
+    if request.method == 'GET':
+        name = request.GET.get("title")
+        results = Business.objects.filter(name__icontains=name).all()
+        print(results)
+        message = f'name'
+        params = {
+            'results': results,
+            'message': message
+        }
+        return render(request, 'results.html', params)
+    else:
+        message = "Something went wrong! Try Again "
+    return render(request, "results.html")
