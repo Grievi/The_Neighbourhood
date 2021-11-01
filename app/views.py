@@ -43,11 +43,11 @@ def user_signup(request):
             username = form.cleaned_data['username']
             password = form.cleaned_data['password1']
             user= authenticate(username=username, password=password)
-            login(request, user)
+            # login(request, user)
             messages.success(request,("Account created successfully"))
 
-            return redirect('home')
+            return redirect('login')
             
     else:
         form=UserCreationForm()
-    return render(request, 'authentication/signup.html', {"message": message,"form": form})
+    return render(request, 'registration/signup.html', {"message": message,"form": form})
