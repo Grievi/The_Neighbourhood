@@ -7,3 +7,8 @@ class NeighbourHood(models.Model):
     occupants=models.IntegerField(null=True, blank=True)
     description = models.TextField()
     
+    def __str__(self):
+        return f'{self.name}'
+    
+    def create_neighborhood(self):
+        self.save()
