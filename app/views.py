@@ -27,3 +27,9 @@ def user_login(request):
             return render(request, 'registration/login.html')
     else:
         return render(request, 'registration/login.html', {"message": message})
+
+def user_logout(request):
+
+    logout(request)
+    messages.success(request, ("You have logged out"))
+    return redirect('index')
