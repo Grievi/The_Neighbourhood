@@ -82,7 +82,7 @@ def business_search(request):
                     'search_results': search_results,
                     'message': message
                 } 
-                return render(request, 'search_results.html', params)
+                return render(request, 'searchresults.html', params)
             else:
                 message = "Something went wrong! Try Again "
     return render(request, "searchresults.html")

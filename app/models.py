@@ -8,6 +8,8 @@ class NeighbourHood(models.Model):
     location = models.CharField(max_length=60)
     occupants_count=models.IntegerField(null=True, blank=True)
     description = models.TextField()
+    health_tell = models.IntegerField(null=True, blank=True)
+    police_number = models.IntegerField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     
     def __str__(self):
