@@ -92,7 +92,7 @@ def neighbourhood(request):
     }
     return render(request, 'neighbourhoods.html', params)
 
-def create_hood(request):
+def create_neighbourhood(request):
     if request.method == 'POST':
         form = NeighbourHoodForm(request.POST, request.FILES)
         if form.is_valid():
@@ -108,7 +108,7 @@ def vacate(request,id):
     hood = get_object_or_404(NeighbourHood, id=id)
     request.user.profile.neighbourhood = None
     request.user.profile.save()
-    return redirect('hood')
+    return redirect('hood',hood)
 
 def move_in(request,id):
     neighbourhood = get_object_or_404(NeighbourHood, id=id)
@@ -124,10 +124,10 @@ def single_hood(request, hood_id):
     if request.method == 'POST':
         form = BusinessForm(request.POST)
         if form.is_valid():
-            b_form = form.save(commit=False)
-            b_form.neighbourhood = hood
-            b_form.user = request.user.profile
-            b_form.save()
+            businessForm = form.save(commit=False)
+            businessForm.neighbourhood = hood
+            businessForm.user = request.user.profile
+            businessForm.save()
             return redirect('single-hood', hood.id)
     else:
         form = BusinessForm()
@@ -138,7 +138,7 @@ def single_hood(request, hood_id):
         'posts': posts
     }
     return render(request, 'single_hood.html', params)
-    
+
 def hood_members(request, hood_id):
     hood = NeighbourHood.objects.get(id=hood_id)
     members = Profile.objects.filter(neighbourhood=hood)

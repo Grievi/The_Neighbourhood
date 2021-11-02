@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block content %}
 <div class="container">
-        <a href="{% url 'newhood' %}" class="btn btn-sm btn-info mb-2"> New NeighbourHood</a>
+        <a href="" class="btn btn-sm btn-info mb-2"> New NeighbourHood</a>
     <div class="row">
         {% for hood in all_hoods %}
         <div class="col-md-4">
@@ -12,9 +12,9 @@
                     <p class="card-text">{{hood.description}}</p>
                     <h6>{{hood.occupants_count}}</h6>
                     {% if request.user.profile.neighbourhood == hood %}
-                    <a href="{% url 'leave-hood' hood.id %}" class="btn btn-outline-danger btn-sm">Leave Hood</a>
+                    <a href="" class="btn btn-outline-danger btn-sm">Leave Hood</a>
                     {% elif not request.user.profile.neighbourhood %}
-                    <a href="{% url 'join-hood' hood.id %}" class="btn btn-primary btn-sm">Join Hood</a>
+                    <a href="" class="btn btn-primary btn-sm">Join Hood</a>
                     {% endif %}
                 </div>
             </div>
