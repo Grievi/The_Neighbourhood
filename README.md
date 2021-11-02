@@ -76,6 +76,12 @@ The following languages have been used on this project:
 - Live link to view the project <a target="_blank" href="https://django-instagram12.herokuapp.com/">NeighbourHood</a>
 
 ## Some Screenshots
+- User Authentication
+  <img src="./screenshots/login.png" alt="screenshot" />
+
+  <img src="./screenshots/signup.png" alt="screenshot" />
+
+- Landing page
 
   <img src="./screenshots/home.png" alt="screenshot" />
 
