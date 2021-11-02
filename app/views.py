@@ -54,6 +54,7 @@ def user_signup(request):
         form=UserCreationForm()
     return render(request, 'registration/signup.html', {"message": message,"form": form})
 
+
 @login_required(login_url='login')
 def profile(request, username):
     return render(request, 'profile.html',{'username':username})
@@ -166,3 +167,4 @@ def create_post(request, hood_id):
     else:
         form = PostForm()
     return render(request, 'post.html', {'form': form})
+
