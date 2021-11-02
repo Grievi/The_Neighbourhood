@@ -54,10 +54,11 @@ def user_signup(request):
         form=UserCreationForm()
     return render(request, 'registration/signup.html', {"message": message,"form": form})
 
-
+@login_required(login_url='login')
 def profile(request, username):
     return render(request, 'profile.html',{'username':username})
 
+@login_required(login_url='login')
 def edit_profile(request, username):
     user = User.objects.get(username=username)
     if request.method == 'POST':
@@ -87,6 +88,7 @@ def business_search(request):
                 message = "Something went wrong! Try Again "
     return render(request, "searchresults.html")
 
+@login_required(login_url='login')
 def neighbourhood(request):
     neighbourhoods = NeighbourHood.objects.all()
     neighbourhoods = neighbourhoods[::-1]
@@ -95,6 +97,7 @@ def neighbourhood(request):
     }
     return render(request, 'neighbourhoods.html', params)
 
+@login_required(login_url='login')
 def create_neighbourhood(request):
     if request.method == 'POST':
         form = NeighbourHoodForm(request.POST, request.FILES)
@@ -107,17 +110,20 @@ def create_neighbourhood(request):
         form = NeighbourHoodForm()
     return render(request, 'newhood.html', {'form': form})
 
+@login_required(login_url='login')
 def vacate(request,id):
     hood = get_object_or_404(NeighbourHood, id=id)
     request.user.profile.neighbourhood = None
     request.user.profile.save()
-    return redirect('hood',hood)
+    return redirect('hood')
 
+@login_required(login_url='login')
 def move_in(request,id):
     neighbourhood = get_object_or_404(NeighbourHood, id=id)
     request.user.profile.neighbourhood = neighbourhood
     request.user.profile.save()
     return redirect('hood')
+
 
 def single_hood(request, hood_id):
     hood = NeighbourHood.objects.get(id=hood_id)
@@ -146,3 +152,17 @@ def hood_members(request, hood_id):
     hood = NeighbourHood.objects.get(id=hood_id)
     members = Profile.objects.filter(neighbourhood=hood)
     return render(request, 'members.html', {'members': members})
+
+def create_post(request, hood_id):
+    hood = NeighbourHood.objects.get(id=hood_id)
+    if request.method == 'POST':
+        form = PostForm(request.POST)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.hood = hood
+            post.user = request.user.profile
+            post.save()
+            return redirect('single-hood', hood.id)
+    else:
+        form = PostForm()
+    return render(request, 'post.html', {'form': form})
