@@ -21,7 +21,7 @@ def user_login(request):
         if user is not None:
             login(request, user)
             messages.success(request,f"Welcome {username} to Th Neighbourhood!")
-            return redirect('index')
+            return redirect('hood')
 
         else:
             messages.success(request,"Oops Something went wrong, please Login!")
@@ -31,10 +31,9 @@ def user_login(request):
         return render(request, 'registration/login.html', {"message": message})
 
 def user_logout(request):
-
     logout(request)
     messages.success(request, ("You have logged out"))
-    return redirect('index')
+    return redirect('login')
 
 def user_signup(request):
     message='Create an account here!'
@@ -48,7 +47,7 @@ def user_signup(request):
             login(request, user)
             messages.success(request,("Account created successfully"))
 
-            return redirect('index')
+            return redirect('login')
             
     else:
         form=UserCreationForm()
@@ -167,4 +166,6 @@ def create_post(request, hood_id):
     else:
         form = PostForm()
     return render(request, 'post.html', {'form': form})
+
+
 

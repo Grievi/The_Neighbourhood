@@ -10,9 +10,10 @@ urlpatterns=[
     path('new', views.create_neighbourhood, name='create_new'),
     path('move_in/<id>', views.move_in, name='move_in'),
     path('vacate/<id>', views.vacate, name='vacate'),
-    path('profile/<username>', views.profile, name='profile_edit'),
+    path('profile/<username>', views.profile, name='profile'),
     path('search/', views.business_search, name='search'),
     path('<hood_id>/members', views.hood_members, name='members'),
     path('<hood_id>/post', views.create_post, name='post'),
+    path('single_hood/<hood_id>', views.single_hood, name='single-hood'),
     
 ]
