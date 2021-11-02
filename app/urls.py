@@ -8,4 +8,9 @@ urlpatterns=[
     path('signup/', views.user_signup, name= 'signup'),
     path('N_hoods/', views.neighbourhood, name='hood'),
     path('new', views.create_hood, name='create_new'),
+    path('move_in/<id>', views.move_in, name='move_in'),
+    path('vacate/<id>', views.vacate, name='leave_hood'),
+    path('profile/<username>', views.profile, name='profile_edit'),
+    path('profile/<username>/edit/', views.edit_profile, name='profile_edit'),
+    path('search/', views.business_search, name='search'),
 ]
