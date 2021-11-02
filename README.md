@@ -73,7 +73,7 @@ The following languages have been used on this project:
 
 ## Setup/Installation Requirements
 
-- Live link to view the project <a target="_blank" href="https://django-instagram12.herokuapp.com/">NeighbourHood</a>
+- Live link to view the project <a target="_blank" href="https://ancient-castle-86931.herokuapp.com/">NeighbourHood</a>
 
 ## Some Screenshots
 - User Authentication
