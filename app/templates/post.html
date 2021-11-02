@@ -2,7 +2,7 @@
 {% load bootstrap5 %}
 {% block content %}
 <div class="container">
-    <div class="row">
+    <div class="row mb-3">
         <div class="col-md-4">
           
             <div class="card">
@@ -12,11 +12,11 @@
             </div>
         </div>
         <div class="col-md-8 bg-white poster">
-            <h3 class="text-center tt ">Add a post to your hood</h3>
-            <form action="" method="post" novalidate>
+            <h3 class="text-center  ">Create a post about your NeighbourHood</h3>
+            <form action="" method="post" >
                 {% csrf_token %}
                 {% bootstrap_form form%}
-                <button type="submit" class="btn btn-sm btn-info "> Post</button>
+                <button type="submit" class="btn btn-outline-success "> Post</button>
             </form>
         </div>
         

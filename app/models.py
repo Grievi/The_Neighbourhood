@@ -44,7 +44,7 @@ class Post(models.Model):
     user = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='post_man')
     title = models.CharField(max_length=120, null=True)
     post = models.TextField()
-    N_hood = models.ForeignKey(NeighbourHood, on_delete=models.CASCADE, related_name='hood_post')
+    N_hood = models.ForeignKey(NeighbourHood, on_delete=models.CASCADE, related_name='hood_post', null=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
 class Business(models.Model):

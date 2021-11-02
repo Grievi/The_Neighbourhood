@@ -8,10 +8,20 @@
             <img class="rounded-circle account-img d-block mx-auto" src="{{ user.profile.profile_picture.url }}"height="125px" width="125px">
             <h5 class="text-center mt-3">{{user.username}}</h5>
             <p class="text-center"> {{user.email}}</p>
-            {% if request.user.profile.neighbourhood %}
-            <p class="text-center">My Hood <a class="btn btn-sm btn-info" href="{% url 'single-hood' user.profile.neighbourhood.id %}">{{ user.profile.neighbourhood.name }}</a>
-            </p>
-            {% endif %}
+            <div class="mb-3">
+                <h6>User Details</h6>
+                <hr>
+                <span>{{user.location}}</span><br>
+                <hr>
+                <span>{{user.neighbourhood}}</span><br>
+                <hr>
+                <div class="mb-3"
+                >
+                    <span><em>All rights reserved for only me!</em></span>
+                </div>
+                <hr>
+            </div>
+            
         </div>
         <div class="col-md-3"></div>
     </div>
@@ -21,5 +31,3 @@
 {% endblock %}
 
 
-</div>
-{% endblock %}

@@ -55,20 +55,59 @@ def user_signup(request):
 
 
 @login_required(login_url='login')
-def profile(request, username):
-    return render(request, 'profile/profile.html',{'username':username})
+def profile(request):
+    
+    current_user = request.user
+    profile = Profile.objects.filter(
+        user_id=current_user.id).first()
+    posts = Post.objects.filter(user_id=current_user.id)
+    neighbourhood = NeighbourHood.objects.all()
+    businesses = Business.objects.filter(user_id=current_user.id)
+    businesses = Business.objects.filter(user_id=current_user.id)
+    return render(request, 'profile/profile.html', {'profile': profile,'posts':posts,'neighbourhood':neighbourhood,'businesses':businesses})
 
 @login_required(login_url='login')
-def edit_profile(request, username):
-    user = User.objects.get(username=username)
-    if request.method == 'POST':
-        form = ProfileForm(request.POST, request.FILES, instance=request.user.profile)
-        if form.is_valid():
-            form.save()
-            return redirect('/profile/profile_edit', user.username)
+def edit_profile(request):
+    if request.method =='POST':
+        current_user=request.user
+        name = request.POST['name']
+        location = request.POST['location']
+        neighbourhood=request.POST['neighbourhood']
+
+        if neighbourhood == "":
+            neighbourhood = None
+        else:
+            neighbourhood = NeighbourHood.objects.get(name=neighbourhood)
+
+        profile_picture = request.FILES['profile_picture']
+        profile_url=profile_picture['url']
+
+        user =User.objects.get(id=current_user.id)
+
+        if Profile.objects.filter(user_id=current_user.id).exists():
+            profile = Profile.objects.get(user_id=current_user.id)
+            profile.profile_picture =profile_url
+            profile.neighbourhood = neighbourhood
+            profile.save()
+        else:
+            profile = Profile(
+                user_id=current_user.id,
+                name=name,
+                profile_picture=profile_url,
+                neighbourhood=neighbourhood,
+                location=location
+            )
+
+            profile.save_profile()
+
+        user.name=name
+        user.save()
+
+        return redirect('profile/profile', {"success": "Profile Updated Successfully"})
     else:
-        form = ProfileForm(instance=request.user.profile)
-    return render(request, 'profile/profile_edit.html', {'form': form})
+        return render(request, 'profile.html', {'danger':'Profile update Failed!'})
+        
+
 
 def business_search(request):
     if request.method == 'GET':
@@ -111,6 +150,21 @@ def create_neighbourhood(request):
     return render(request, 'newhood.html', {'form': form})
 
 @login_required(login_url='login')
+def create_post(request):
+    
+    if request.method == 'POST':
+        form = PostForm(request.POST)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.user = request.user.profile
+            post.save()
+            return redirect('hood')
+    else:
+        form = PostForm()
+    return render(request, 'post.html', {'form': form})
+
+
+@login_required(login_url='login')
 def vacate(request,id):
     hood = get_object_or_404(NeighbourHood, id=id)
     request.user.profile.neighbourhood = None
@@ -125,68 +179,31 @@ def move_in(request,id):
     return redirect('hood')
 
 
-def single_hood(request, hood_id):
-    hood = NeighbourHood.objects.get(id=hood_id)
-    business = Business.objects.filter(neighbourhood=hood)
-    posts = Post.objects.filter(hood=hood)
-    posts = posts[::-1]
-    if request.method == 'POST':
-        form = BusinessForm(request.POST)
-        if form.is_valid():
-            businessForm = form.save(commit=False)
-            businessForm.neighbourhood = hood
-            businessForm.user = request.user.profile
-            businessForm.save()
-            return redirect('single-hood', hood.id)
-    else:
-        form = BusinessForm()
-    params = {
-        'hood': hood,
-        'business': business,
-        'form': form,
-        'posts': posts
-    }
-    return render(request, 'single_hood.html', params)
-
 def hood_members(request, hood_id):
     hood = NeighbourHood.objects.get(id=hood_id)
     members = Profile.objects.filter(neighbourhood=hood)
     return render(request, 'members.html', {'members': members})
 
-def create_post(request, hood_id):
-    hood = NeighbourHood.objects.get(id=hood_id)
-    if request.method == 'POST':
-        form = PostForm(request.POST)
-        if form.is_valid():
-            post = form.save(commit=False)
-            post.hood = hood
-            post.user = request.user.profile
-            post.save()
-            return redirect('single-hood', hood.id)
-    else:
-        form = PostForm()
-    return render(request, 'post.html', {'form': form})
-
-def single_hood(request, hood_id):
-    hood = NeighbourHood.objects.get(id=hood_id)
-    business = Business.objects.filter(neighbourhood=hood)
-    posts = Post.objects.filter(hood=hood)
-    posts = posts[::-1]
-    if request.method == 'POST':
-        form = BusinessForm(request.POST)
-        if form.is_valid():
-            b_form = form.save(commit=False)
-            b_form.neighbourhood = hood
-            b_form.user = request.user.profile
-            b_form.save()
-            return redirect('single-hood', hood.id)
-    else:
-        form = BusinessForm()
-    params = {
-        'hood': hood,
-        'business': business,
-        'form': form,
-        'posts': posts
-    }
-    return render(request, 'singlehood.html', params)
+# def single_hood(request, hood_id):
+#     hood = NeighbourHood.objects.get(id=hood_id)
+#     business = Business.objects.filter(neighbourhood=hood)
+#     posts = Post.objects.filter(hood=hood)
+#     posts = posts[::-1]
+#     if request.method == 'POST':
+#         form = BusinessForm(request.POST)
+#         if form.is_valid():
+#             b_form = form.save(commit=False)
+#             b_form.neighbourhood = hood
+#             b_form.user = request.user.profile
+#             b_form.save()
+#             return redirect('single-hood', hood.id)
+#     else:
+#         form = BusinessForm()
+#     params = {
+#         'hood': hood,
+#         'business': business,
+#         'form': form,
+#         'posts': posts
+#     }
+#     return render(request, 'singlehood.html', params)
 
