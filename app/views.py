@@ -56,7 +56,7 @@ def user_signup(request):
 
 @login_required(login_url='login')
 def profile(request, username):
-    return render(request, 'profile.html',{'username':username})
+    return render(request, 'profile/profile.html',{'username':username})
 
 @login_required(login_url='login')
 def edit_profile(request, username):
@@ -65,10 +65,10 @@ def edit_profile(request, username):
         form = ProfileForm(request.POST, request.FILES, instance=request.user.profile)
         if form.is_valid():
             form.save()
-            return redirect('profile_edit', user.username)
+            return redirect('/profile/profile_edit', user.username)
     else:
         form = ProfileForm(instance=request.user.profile)
-    return render(request, 'profile_edit.html', {'form': form})
+    return render(request, 'profile/profile_edit.html', {'form': form})
 
 def business_search(request):
     if request.method == 'GET':
@@ -167,5 +167,26 @@ def create_post(request, hood_id):
         form = PostForm()
     return render(request, 'post.html', {'form': form})
 
-
+def single_hood(request, hood_id):
+    hood = NeighbourHood.objects.get(id=hood_id)
+    business = Business.objects.filter(neighbourhood=hood)
+    posts = Post.objects.filter(hood=hood)
+    posts = posts[::-1]
+    if request.method == 'POST':
+        form = BusinessForm(request.POST)
+        if form.is_valid():
+            b_form = form.save(commit=False)
+            b_form.neighbourhood = hood
+            b_form.user = request.user.profile
+            b_form.save()
+            return redirect('single-hood', hood.id)
+    else:
+        form = BusinessForm()
+    params = {
+        'hood': hood,
+        'business': business,
+        'form': form,
+        'posts': posts
+    }
+    return render(request, 'singlehood.html', params)
 
