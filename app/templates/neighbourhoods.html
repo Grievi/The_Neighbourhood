@@ -1,16 +1,17 @@
 {% extends 'base.html' %}
 {% block content %}
 <div class="container">
-        <a href="" class="btn btn-sm btn-info mb-2"> New NeighbourHood</a>
+    <h1 class="text-center">Welcome to Another Episode of The NeighbourHood</h1>
+        <a href="{% url 'create_new' %}" class="btn btn-outline-success bt mb-3"> New NeighbourHood</a>
     <div class="row">
-        {% for hood in all_hoods %}
+        {% for hood in neighbourhoods %}
         <div class="col-md-4">
             <div class="card mb-4" style="min-height:340px">
                 
                 <div class="card-body">
-                    <h5 class="card-title">{{ hood.name }}  ({{hood.location}}) <span class="ml-4">{{hood.members.count}} member{{hood.members.count|pluralize}}</span></h5>
+                    <h5 class="card-title">{{ hood.name }}  ({{hood.location}}) <span class="ml-4">{{hood.occupants_count}} members</span></h5>
                     <p class="card-text">{{hood.description}}</p>
-                    <h6>{{hood.occupants_count}}</h6>
+                    
                     {% if request.user.profile.neighbourhood == hood %}
                     <a href="" class="btn btn-outline-danger btn-sm">Leave Hood</a>
                     {% elif not request.user.profile.neighbourhood %}
