@@ -13,4 +13,6 @@ urlpatterns=[
     path('profile/<username>', views.profile, name='profile_edit'),
     path('profile/<username>/edit/', views.edit_profile, name='profile_edit'),
     path('search/', views.business_search, name='search'),
+    path('<hood_id>/members', views.hood_members, name='members'),
+    path('search/', views.business_search, name='search'),
 ]

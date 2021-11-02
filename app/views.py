@@ -71,17 +71,20 @@ def edit_profile(request, username):
 
 def business_search(request):
     if request.method == 'GET':
-        name = request.GET.get("title")
-        results = Business.objects.filter(name__icontains=name).all()
-        print(results)
-        message = f'name'
-        params = {
-            'results': results,
-            'message': message
-        }
-        return render(request, 'results.html', params)
-    else:
-        message = "Something went wrong! Try Again "
+        form = BusinessForm(request.POST)
+        if form.is_valid():
+            name = request.GET.get("title")
+            if name:
+                search_results = Business.objects.filter(name__icontains=name).all()
+                print(search_results)
+                message = f'name'
+                params = {
+                    'search_results': search_results,
+                    'message': message
+                } 
+                return render(request, 'search_results.html', params)
+            else:
+                message = "Something went wrong! Try Again "
     return render(request, "searchresults.html")
 
 def neighbourhood(request):
