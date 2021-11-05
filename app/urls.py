@@ -14,6 +14,6 @@ urlpatterns=[
     path('search/', views.business_search, name='search'),
     path('members/', views.hood_members, name='members'),
     path('post/', views.create_post, name='post'),
-    path('profile/', views.edit_profile, name='edit-profile'),
+    path('profile/', views.edit_profile, name='update_profile'),
     
 ]

@@ -100,7 +100,7 @@ The following languages have been used on this project:
 
 ## Known Bugs
 
-Bugs in displaying Business category and post category but soon will work on it
+Bugs in displaying Business category and does not display profile  category but soon will work on it
 
 ## Support and contact details
 Lets interact, Work Together or Contribute to my code, catch me @ 

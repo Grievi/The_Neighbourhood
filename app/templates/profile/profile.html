@@ -1,9 +1,15 @@
 {% extends 'base.html' %}
-
+{% load bootstrap5 %}
 {% block content %}
 <div class="container ">
     <div class="row">
-        <div class="col-md-3"></div>
+        <div class="col-md-6">
+            <div class="col-md-6">
+                <form action="">
+                    
+                </form>
+            </div>
+        </div>
         <div class="col-md-6 mt-4 bg-white prof mr-2 ml-2">
             <img class="rounded-circle account-img d-block mx-auto" src="{{ user.profile.profile_picture.url }}"height="125px" width="125px">
             <h5 class="text-center mt-3">{{user.username}}</h5>
@@ -11,9 +17,9 @@
             <div class="mb-3">
                 <h6>User Details</h6>
                 <hr>
-                <span>{{user.location}}</span><br>
+                <span>User locatio:{{user.location}}</span><br>
                 <hr>
-                <span>{{user.neighbourhood}}</span><br>
+                <span>User Neighbourhood: {{user.neighbourhood}}</span><br>
                 <hr>
                 <div class="mb-3"
                 >
@@ -23,7 +29,7 @@
             </div>
             
         </div>
-        <div class="col-md-3"></div>
+        <!-- <div class="col-md-3"></div> -->
     </div>
 
 

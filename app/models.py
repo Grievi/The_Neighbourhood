@@ -1,9 +1,11 @@
 from django.db import models
 from django.contrib.auth.models import User
 from datetime import datetime as dt
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 class NeighbourHood(models.Model):
-    admin = models.ForeignKey("Profile", on_delete=models.CASCADE, related_name='hood')
+    admin = models.ForeignKey(User, on_delete=models.CASCADE, related_name='hood')
     name = models.CharField(max_length=50)
     location = models.CharField(max_length=60)
     occupants_count=models.IntegerField(null=True, blank=True)
@@ -27,7 +29,7 @@ class NeighbourHood(models.Model):
 
 class Profile(models.Model):
 
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=80, blank=True)
     profile_picture = models.ImageField(upload_to='images/', default='default.png')
     location = models.CharField(max_length=50, blank=True, null=True)
@@ -37,11 +39,17 @@ class Profile(models.Model):
     def __str__(self):
         return f'{self.user.username} profile'
 
-    def save_profile(self):
-        self.save()
+    @receiver(post_save, sender=User)
+    def create_user_profile(sender, instance, created, **kwargs):
+        if created:
+            Profile.objects.create(user=instance)
+
+    @receiver(post_save, sender=User)
+    def save_user_profile(sender, instance, **kwargs):
+        instance.profile.save()
         
 class Post(models.Model):
-    user = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='post_man')
+    
     title = models.CharField(max_length=120, null=True)
     post = models.TextField()
     N_hood = models.ForeignKey(NeighbourHood, on_delete=models.CASCADE, related_name='hood_post', null=True)
@@ -67,6 +75,9 @@ class Business(models.Model):
     @classmethod
     def search_business(cls, name):
         return cls.objects.filter(name__icontains=name).all()
+
+
+    
 
 
 
